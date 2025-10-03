@@ -1,4 +1,4 @@
-# risk.py
+# risk_agent.py
 
 """
 Risk analysis module for financial portfolios.
@@ -46,6 +46,7 @@ Risk analysis module for financial portfolios.
 
 
 """
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -59,4 +60,209 @@ BTC = yf.Ticker("BTC-USD")
 print(BTC.info)
 
 class RiskAgent:
-    pass
+    """A comprehensive risk analysis and management tool for financial portfolios.
+    This class provides methods for various risk analysis techniques, including both common quantitative methods and advanced analytical techniques.
+    It also includes qualitative and strategic approaches to risk management.
+    Attributes:
+        None
+    Methods:
+        standard_deviation(returns): Calculate the standard deviation of returns.
+        value_at_risk(returns, confidence_level): Calculate the Value-at-Risk (VaR) at a given confidence level.
+        tracking_error(portfolio_returns, benchmark_returns): Calculate the tracking error between portfolio and benchmark returns.
+        drawdown(portfolio_values): Calculate the drawdown of a portfolio.
+        beta(portfolio_returns, market_returns): Calculate the beta of a portfolio relative to the market.
+        correlation_matrix(returns): Calculate the correlation matrix of asset returns.
+        stress_test(portfolio_values, shock): Perform a stress test by applying a shock to the portfolio values.
+        scenario_analysis(portfolio_values, scenarios): Perform scenario analysis by applying different scenarios to the portfolio values.
+        factor_decomposition(returns, factors): Decompose portfolio returns into factor contributions.
+        marginal_var(portfolio_returns, asset_returns, confidence_level): Calculate the Marginal VaR for each asset in the portfolio.
+        component_var(portfolio_returns, asset_returns, confidence_level): Calculate the Component VaR for each asset in the portfolio.
+        plot_drawdown(drawdown): Plot the drawdown of a portfolio.
+        plot_correlation_matrix(returns): Plot the correlation matrix of asset returns.
+        rebalance_portfolio(current_weights, target_weights, threshold): Rebalance the portfolio if weights deviate from target weights by a certain threshold.
+        diversify_portfolio(assets, max_weight_per_asset): Create a diversified portfolio with maximum weight per asset.
+        hedge_portfolio(portfolio_values, hedge_ratio): Hedge the portfolio by a certain ratio.
+        asset_allocation(total_investment, allocation): Allocate total investment across different asset classes.
+        risk_identification(portfolio): Identify potential risks in the portfolio.
+        weighted_ranking(risks, weights): Rank risks based on weighted scoring.
+        governance_meeting(risks, weights): Conduct a governance meeting to discuss and prioritize risks.
+    Examples:
+        >>> agent = RiskAgent()
+        >>> returns = pd.Series([0.01, -0.02, 0.015, -0.005])
+        >>> agent.standard_deviation(returns)
+        0.01224744871391589
+        >>> agent.value_at_risk(returns, confidence_level=0.95)
+        -0.019579829999999998
+        >>> portfolio_values = pd.Series([100, 98, 97, 99, 95])
+        >>> drawdown = agent.drawdown(portfolio_values)
+        >>> agent.plot_drawdown(drawdown)
+        >>> assets = ['AAPL', 'MSFT', 'GOOGL']
+        >>> weights = agent.diversify_portfolio(assets, max_weight_per_asset=0.4)
+        >>> print(weights)
+        AAPL     0.333333
+        MSFT     0.333333
+        GOOGL    0.333333
+        dtype: float64
+    Note:
+        This class is designed for educational and illustrative purposes. In a production environment,
+        additional error handling, logging, and validation may be necessary.
+    """
+    def __init__(self):
+        print("RiskAgent initialized and ready for risk analysis.")
+    
+    def __repr__(self):
+        return "<RiskAgent: Comprehensive Risk Analysis and Management Tool>"
+    
+    def __str__(self):
+        return "RiskAgent: A tool for analyzing and managing financial portfolio risks."    
+    
+    def __del__(self):
+        print("RiskAgent instance is being deleted.")
+
+    def standard_deviation(self, returns: pd.Series) -> float:
+        """Calculate the standard deviation of returns."""
+        return np.std(returns)
+    
+    def value_at_risk(self, returns: pd.Series, confidence_level: float = 0.95) -> float:
+        """Calculate the Value-at-Risk (VaR) at a given confidence level."""
+        if not 0 < confidence_level < 1:
+            raise ValueError("Confidence level must be between 0 and 1.")
+        mean = np.mean(returns)
+        std_dev = np.std(returns)
+        var = norm.ppf(1 - confidence_level, mean, std_dev)
+        return var
+    
+    def tracking_error(self, portfolio_returns: pd.Series, benchmark_returns: pd.Series) -> float:
+        """Calculate the tracking error between portfolio and benchmark returns."""
+        if len(portfolio_returns) != len(benchmark_returns):
+            raise ValueError("Portfolio and benchmark returns must have the same length.")
+        return np.std(portfolio_returns - benchmark_returns)
+    
+    def drawdown(self, portfolio_values: pd.Series) -> pd.Series:
+        """Calculate the drawdown of a portfolio."""
+        peak = portfolio_values.cummax()
+        drawdown = (portfolio_values - peak) / peak
+        return drawdown
+    
+    def beta(self, portfolio_returns: pd.Series, market_returns: pd.Series) -> float:
+        """Calculate the beta of a portfolio relative to the market."""
+        if len(portfolio_returns) != len(market_returns):
+            raise ValueError("Portfolio and market returns must have the same length.")
+        covariance = np.cov(portfolio_returns, market_returns)[0][1]
+        market_variance = np.var(market_returns)
+        beta = covariance / market_variance
+        return beta
+    
+    def correlation_matrix(self, returns: pd.DataFrame) -> pd.DataFrame:
+        """Calculate the correlation matrix of asset returns."""
+        return returns.corr()
+    
+    def stress_test(self, portfolio_values: pd.Series, shock: float) -> pd.Series:
+        """Perform a stress test by applying a shock to the portfolio values."""
+        stressed_values = portfolio_values * (1 - shock)
+        return stressed_values  
+    
+    def scenario_analysis(self, portfolio_values: pd.Series, scenarios: Dict[str, float]) -> Dict[str, pd.Series]:
+        """Perform scenario analysis by applying different scenarios to the portfolio values."""
+        results = {}
+        for scenario, impact in scenarios.items():
+            results[scenario] = portfolio_values * (1 + impact)
+        return results
+    
+    def factor_decomposition(self, returns: pd.DataFrame, factors: pd.DataFrame) -> pd.DataFrame:
+        """Decompose portfolio returns into factor contributions."""
+        from sklearn.linear_model import LinearRegression
+        
+        model = LinearRegression()
+        model.fit(factors, returns)
+        factor_contributions = pd.DataFrame(model.coef_, index=factors.columns, columns=['Contribution'])
+        return factor_contributions
+    
+    def marginal_var(self, portfolio_returns: pd.Series, asset_returns: pd.DataFrame, confidence_level: float = 0.95) -> pd.Series:
+        """Calculate the Marginal VaR for each asset in the portfolio."""
+        base_var = self.value_at_risk(portfolio_returns, confidence_level)
+        marginal_vars = {}
+        for asset in asset_returns.columns:
+            perturbed_portfolio = portfolio_returns + asset_returns[asset]
+            perturbed_var = self.value_at_risk(perturbed_portfolio, confidence_level)
+            marginal_vars[asset] = perturbed_var - base_var
+        return pd.Series(marginal_vars)
+    
+    def component_var(self, portfolio_returns: pd.Series, asset_returns: pd.DataFrame, confidence_level: float = 0.95) -> pd.Series:
+        """Calculate the Component VaR for each asset in the portfolio."""
+        total_var = self.value_at_risk(portfolio_returns, confidence_level)
+        marginal_vars = self.marginal_var(portfolio_returns, asset_returns, confidence_level)
+        weights = asset_returns.mean() / asset_returns.mean().sum()
+        component_vars = weights * marginal_vars
+        return component_vars
+    
+    def plot_drawdown(self, drawdown: pd.Series):
+        """Plot the drawdown of a portfolio."""
+        plt.figure(figsize=(10, 6))
+        plt.fill_between(drawdown.index, drawdown, color='red', alpha=0.5)
+        plt.title('Portfolio Drawdown')
+        plt.xlabel('Date')
+        plt.ylabel('Drawdown')
+        plt.grid()
+        plt.show()
+
+    def plot_correlation_matrix(self, returns: pd.DataFrame):
+        """Plot the correlation matrix of asset returns."""
+        corr_matrix = self.correlation_matrix(returns)
+        plt.figure(figsize=(10, 8))
+        sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap='coolwarm', vmin=-1, vmax=1)
+        plt.title('Correlation Matrix of Asset Returns')
+        plt.show()
+
+    def rebalance_portfolio(self, current_weights: pd.Series, target_weights: pd.Series, threshold: float = 0.05) -> pd.Series:
+        """Rebalance the portfolio if weights deviate from target weights by a certain threshold."""
+        deviation = (current_weights - target_weights).abs()
+        if (deviation > threshold).any():
+            return target_weights
+        return current_weights
+    
+    def diversify_portfolio(self, assets: List[str], max_weight_per_asset: float = 0.35) -> pd.Series:
+        """Create a diversified portfolio with maximum weight per asset."""
+        num_assets = len(assets)
+        if num_assets == 0:
+            raise ValueError("Asset list cannot be empty.")
+        equal_weight = min(1.0 / num_assets, max_weight_per_asset)
+        weights = pd.Series(equal_weight, index=assets)
+        weights /= weights.sum()  # Normalize to sum to 1
+        return weights
+    
+    def hedge_portfolio(self, portfolio_values: pd.Series, hedge_ratio: float) -> pd.Series:
+        """Hedge the portfolio by a certain ratio."""
+        if not 0 <= hedge_ratio <= 1:
+            raise ValueError("Hedge ratio must be between 0 and 1.")
+        hedged_values = portfolio_values * (1 - hedge_ratio)
+        return hedged_values
+    
+    def asset_allocation(self, total_investment: float, allocation: Dict[str, float]) -> pd.Series:
+        """Allocate total investment across different asset classes."""
+        if not np.isclose(sum(allocation.values()), 1.0):
+            raise ValueError("Allocation percentages must sum to 1.")
+        allocation_series = pd.Series({asset: total_investment * weight for asset, weight in allocation.items()})
+        return allocation_series
+    
+    def risk_identification(self, portfolio: pd.DataFrame) -> List[str]:
+        """Identify potential risks in the portfolio."""
+        risks = []
+        if portfolio.isnull().values.any():
+            risks.append("Data Quality Risk: Missing values in portfolio data.")
+        if (portfolio < 0).any().any():
+            risks.append("Negative Holdings Risk: Portfolio contains negative holdings.")
+        if portfolio.shape[1] < 2:
+            risks.append("Concentration Risk: Portfolio has less than two assets.")
+        return risks
+    
+    def weighted_ranking(self, risks: List[str], weights: Dict[str, float]) -> pd.Series:
+        """Rank risks based on weighted scoring."""
+        scores = pd.Series({risk: weights.get(risk, 0) for risk in risks})
+        return scores.sort_values(ascending=False)
+    
+    def governance_meeting(self, risks: List[str], weights: Dict[str, float]) -> pd.Series:
+        """Conduct a governance meeting to discuss and prioritize risks."""
+        ranked_risks = self.weighted_ranking(risks, weights)
+        return ranked_risks
+    
