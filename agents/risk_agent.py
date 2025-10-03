@@ -55,9 +55,9 @@ from scipy.stats import norm
 from typing import List, Dict, Any
 import yfinance as yf
 
-BTC = yf.Ticker("BTC-USD")
+# BTC = yf.Ticker("BTC-USD")
 
-print(BTC.info)
+# print(BTC.info)
 
 class RiskAgent:
     """A comprehensive risk analysis and management tool for financial portfolios.
@@ -86,6 +86,11 @@ class RiskAgent:
         risk_identification(portfolio): Identify potential risks in the portfolio.
         weighted_ranking(risks, weights): Rank risks based on weighted scoring.
         governance_meeting(risks, weights): Conduct a governance meeting to discuss and prioritize risks.
+        max_drawdown(portfolio_values): Calculate the maximum drawdown of a portfolio.
+        sharpe_ratio(returns, risk_free_rate): Calculate the Sharpe Ratio of a portfolio.
+        sortino_ratio(returns, risk_free_rate): Calculate the Sortino Ratio of a portfolio.
+        calmar_ratio(portfolio_values): Calculate the Calmar Ratio of a portfolio.
+        
     Examples:
         >>> agent = RiskAgent()
         >>> returns = pd.Series([0.01, -0.02, 0.015, -0.005])
@@ -265,4 +270,28 @@ class RiskAgent:
         """Conduct a governance meeting to discuss and prioritize risks."""
         ranked_risks = self.weighted_ranking(risks, weights)
         return ranked_risks
+    
+    def max_drawdown(self, portfolio_values: pd.Series) -> float:
+        """Calculate the maximum drawdown of a portfolio."""
+        drawdown = self.drawdown(portfolio_values)
+        max_dd = drawdown.min()
+        return max_dd
+    
+    def sharpe_ratio(self, returns: pd.Series, risk_free_rate: float = 0.0) -> float:
+        """Calculate the Sharpe Ratio of a portfolio."""
+        excess_returns = returns - risk_free_rate
+        return np.mean(excess_returns) / np.std(excess_returns) if np.std(excess_returns) != 0 else np.nan
+    
+    def sortino_ratio(self, returns: pd.Series, risk_free_rate: float = 0.0) -> float:
+        """Calculate the Sortino Ratio of a portfolio."""
+        downside_returns = returns[returns < 0]
+        downside_std = np.std(downside_returns)
+        excess_returns = returns - risk_free_rate
+        return np.mean(excess_returns) / downside_std if downside_std != 0 else np.nan
+    
+    def calmar_ratio(self, portfolio_values: pd.Series) -> float:
+        """Calculate the Calmar Ratio of a portfolio."""
+        annual_return = (portfolio_values.iloc[-1] / portfolio_values.iloc[0]) ** (252 / len(portfolio_values)) - 1
+        max_dd = abs(self.max_drawdown(portfolio_values))
+        return annual_return / max_dd if max_dd != 0 else np.nan
     
