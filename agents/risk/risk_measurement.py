@@ -38,23 +38,11 @@ Risk analysis module for financial portfolios.
         These tools help to identify which specific positions contribute most to the overall portfolio risk, enabling targeted risk reduction strategies. 
 
         
-3.Qualitative and Strategic Approaches:
-
-    Risk Identification: 
-        The first step in risk management, which involves recognizing potential risks associated with investments and market conditions. 
-    Weighted Ranking and Scoring Techniques: 
-        Used by governing bodies to assess risks by assigning weights and scores, helping to prioritize risks during governance meetings. 
-    Portfolio Diversification: 
-        A strategic approach to spread investments across different asset classes, sectors, and geographies to reduce the impact of any single underperforming investment. 
-    Asset Allocation: 
-        A strategy that involves strategically distributing investments across different asset classes to manage risk according to the investor's goals. 
-    Hedging: 
-        Employing financial instruments or derivatives to offset potential losses in another investment, reducing overall portfolio risk. 
-
 
 """
 
-"""A comprehensive risk analysis and management tool for financial portfolios.
+"""
+A comprehensive risk analysis and management tool for financial portfolios.
 This class provides methods for various risk analysis techniques, including both common quantitative methods and advanced analytical techniques.
 It also includes qualitative and strategic approaches to risk management.
 Attributes:
@@ -66,24 +54,20 @@ Methods:
     drawdown(portfolio_values): Calculate the drawdown of a portfolio.
     beta(portfolio_returns, market_returns): Calculate the beta of a portfolio relative to the market.
     correlation_matrix(returns): Calculate the correlation matrix of asset returns.
-    stress_test(portfolio_values, shock): Perform a stress test by applying a shock to the portfolio values.
-    scenario_analysis(portfolio_values, scenarios): Perform scenario analysis by applying different scenarios to the portfolio values.
     factor_decomposition(returns, factors): Decompose portfolio returns into factor contributions.
     marginal_var(portfolio_returns, asset_returns, confidence_level): Calculate the Marginal VaR for each asset in the portfolio.
     component_var(portfolio_returns, asset_returns, confidence_level): Calculate the Component VaR for each asset in the portfolio.
     plot_drawdown(drawdown): Plot the drawdown of a portfolio.
     plot_correlation_matrix(returns): Plot the correlation matrix of asset returns.
-    rebalance_portfolio(current_weights, target_weights, threshold): Rebalance the portfolio if weights deviate from target weights by a certain threshold.
-    diversify_portfolio(assets, max_weight_per_asset): Create a diversified portfolio with maximum weight per asset.
-    hedge_portfolio(portfolio_values, hedge_ratio): Hedge the portfolio by a certain ratio.
     asset_allocation(total_investment, allocation): Allocate total investment across different asset classes.
     risk_identification(portfolio): Identify potential risks in the portfolio.
     weighted_ranking(risks, weights): Rank risks based on weighted scoring.
     governance_meeting(risks, weights): Conduct a governance meeting to discuss and prioritize risks.
     max_drawdown(portfolio_values): Calculate the maximum drawdown of a portfolio.
     sharpe_ratio(returns, risk_free_rate): Calculate the Sharpe Ratio of a portfolio.
-    sortino_ratio(returns, risk_free_rate): Calculate the Sortino Ratio of a portfolio.
     calmar_ratio(portfolio_values): Calculate the Calmar Ratio of a portfolio.
+    sesortino_ratio(returns, risk_free_rate): Calculate the Sortino Ratio of a portfolio.
+    treynor_ratio(returns, market_returns, risk_free_rate): Calculate the Treyn
     
 Examples:
     >>> returns = pd.Series([0.01, -0.02, 0.015, -0.005])
@@ -106,6 +90,17 @@ Note:
     additional error handling, logging, and validation may be necessary.
 """
 
+
+"""
+Chosen risk analysis and management techniques based on portfolio characteristics and investment goals.
+
+1.standard_deviation(returns["AAPL"])
+2.value_at_risk(returns["AAPL"])
+3.max_drawdown(portfolio_values)
+4.sharpe_ratio(returns["AAPL"])
+5.correlation_matrix(returns)
+
+"""
 def standard_deviation( returns: pd.Series) -> float:
     """Calculate the standard deviation of returns."""
     return np.std(returns)
@@ -128,8 +123,8 @@ def tracking_error( portfolio_returns: pd.Series, benchmark_returns: pd.Series) 
 def drawdown( portfolio_values: pd.Series) -> pd.Series:
     """Calculate the drawdown of a portfolio."""
     peak = portfolio_values.cummax()
-    drawdown = (portfolio_values - peak) / peak
-    return drawdown
+    dd = (portfolio_values - peak) / peak
+    return dd
 
 def beta( portfolio_returns: pd.Series, market_returns: pd.Series) -> float:
     """Calculate the beta of a portfolio relative to the market."""
@@ -143,18 +138,6 @@ def beta( portfolio_returns: pd.Series, market_returns: pd.Series) -> float:
 def correlation_matrix( returns: pd.DataFrame) -> pd.DataFrame:
     """Calculate the correlation matrix of asset returns."""
     return returns.corr()
-
-def stress_test( portfolio_values: pd.Series, shock: float) -> pd.Series:
-    """Perform a stress test by applying a shock to the portfolio values."""
-    stressed_values = portfolio_values * (1 - shock)
-    return stressed_values  
-
-def scenario_analysis( portfolio_values: pd.Series, scenarios: Dict[str, float]) -> Dict[str, pd.Series]:
-    """Perform scenario analysis by applying different scenarios to the portfolio values."""
-    results = {}
-    for scenario, impact in scenarios.items():
-        results[scenario] = portfolio_values * (1 + impact)
-    return results
 
 def factor_decomposition( returns: pd.DataFrame, factors: pd.DataFrame) -> pd.DataFrame:
     """Decompose portfolio returns into factor contributions."""
@@ -200,48 +183,6 @@ def plot_correlation_matrix( returns: pd.DataFrame):
     sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap='coolwarm', vmin=-1, vmax=1)
     plt.title('Correlation Matrix of Asset Returns')
     plt.show()
-
-def rebalance_portfolio( current_weights: pd.Series, target_weights: pd.Series, threshold: float = 0.05) -> pd.Series:
-    """Rebalance the portfolio if weights deviate from target weights by a certain threshold."""
-    deviation = (current_weights - target_weights).abs()
-    if (deviation > threshold).any():
-        return target_weights
-    return current_weights
-
-def diversify_portfolio( assets: List[str], max_weight_per_asset: float = 0.35) -> pd.Series:
-    """Create a diversified portfolio with maximum weight per asset."""
-    num_assets = len(assets)
-    if num_assets == 0:
-        raise ValueError("Asset list cannot be empty.")
-    equal_weight = min(1.0 / num_assets, max_weight_per_asset)
-    weights = pd.Series(equal_weight, index=assets)
-    weights /= weights.sum()  # Normalize to sum to 1
-    return weights
-
-def hedge_portfolio( portfolio_values: pd.Series, hedge_ratio: float) -> pd.Series:
-    """Hedge the portfolio by a certain ratio."""
-    if not 0 <= hedge_ratio <= 1:
-        raise ValueError("Hedge ratio must be between 0 and 1.")
-    hedged_values = portfolio_values * (1 - hedge_ratio)
-    return hedged_values
-
-def asset_allocation( total_investment: float, allocation: Dict[str, float]) -> pd.Series:
-    """Allocate total investment across different asset classes."""
-    if not np.isclose(sum(allocation.values()), 1.0):
-        raise ValueError("Allocation percentages must sum to 1.")
-    allocation_series = pd.Series({asset: total_investment * weight for asset, weight in allocation.items()})
-    return allocation_series
-
-def risk_identification( portfolio: pd.DataFrame) -> List[str]:
-    """Identify potential risks in the portfolio."""
-    risks = []
-    if portfolio.isnull().values.any():
-        risks.append("Data Quality Risk: Missing values in portfolio data.")
-    if (portfolio < 0).any().any():
-        risks.append("Negative Holdings Risk: Portfolio contains negative holdings.")
-    if portfolio.shape[1] < 2:
-        risks.append("Concentration Risk: Portfolio has less than two assets.")
-    return risks
 
 def weighted_ranking( risks: List[str], weights: Dict[str, float]) -> pd.Series:
     """Rank risks based on weighted scoring."""
