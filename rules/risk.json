@@ -1,11 +1,9 @@
 {
-    "max_daily_loss_percent": 5,
-    "max_position_size_percent": 10,
-    "max_open_positions": 5,
-    "stop_loss_percent": 2,
-    "take_profit_percent": 4,
-    "risk_reward_ratio": 2,
-    "trailing_stop_loss_percent": 1.5,
-    "max_consecutive_losses": 3,
-    "max_drawdown_percent": 15
+  "max_daily_loss": 0.02,
+  "max_weekly_loss": 0.05,
+  "risk_per_change": 0.005,
+  "max_weight_per_asset": 0.35,
+  "min_assets": 4,
+  "rebalance": { "method": "monthly", "threshold": 0.05 },
+  "allowed_assets": ["EQUITY", "BOND", "GOLD", "CASH", "CRYPTO_SMALL"]
 }
