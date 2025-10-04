@@ -4,9 +4,6 @@
 /.venv
 .venv/
 
-/data
-data
-/data/
 data/
 
 __pycache__/
