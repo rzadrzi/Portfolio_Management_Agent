@@ -293,5 +293,8 @@ class RiskAgent:
         """Calculate the Calmar Ratio of a portfolio."""
         annual_return = (portfolio_values.iloc[-1] / portfolio_values.iloc[0]) ** (252 / len(portfolio_values)) - 1
         max_dd = abs(self.max_drawdown(portfolio_values))
-        return annual_return / max_dd if max_dd != 0 else np.nan
+        try:
+            return annual_return / max_dd if max_dd != 0 else np.nan
+        except Exception as e:
+            print(f"Error calculating Calmar Ratio: {e}")
     
