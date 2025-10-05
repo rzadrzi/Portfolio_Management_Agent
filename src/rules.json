@@ -1,0 +1,9 @@
+{
+  "max_daily_loss": 0.02,
+  "max_weekly_loss": 0.05,
+  "risk_per_change": 0.005,
+  "max_weight_per_asset": 0.35,
+  "min_assets": 4,
+  "rebalance": { "method": "monthly", "threshold": 0.05 },
+  "allowed_assets": ["EQUITY", "BOND", "GOLD", "CASH", "CRYPTO_SMALL"]
+}
