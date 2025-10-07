@@ -2,13 +2,13 @@
 
 ## Classic Methods
 #### 1. Mean-Variance / Markowitz
-&ensp;&ensp;&ensp;&ensp;**Goal**: Maximize expected return for a given level of risk, or minimize risk for a given expected return.
-&ensp;&ensp;&ensp;&ensp;**Strengths**: Foundational framework of Modern Portfolio Theory (MPT).
+&ensp;&ensp;&ensp;&ensp;**Goal**: Maximize expected return for a given level of risk, or minimize risk for a given expected return.<br>
+&ensp;&ensp;&ensp;&ensp;**Strengths**: Foundational framework of Modern Portfolio Theory (MPT).<br>
 &ensp;&ensp;&ensp;&ensp;**Limitations**: Highly sensitive to estimation errors (mean return, covariance), can produce concentrated allocations.
 
 #### 2. Minimum Variance Portfolio
-&ensp;&ensp;&ensp;&ensp;**Goal**:Minimize total portfolio variance regardless of expected return.
-&ensp;&ensp;&ensp;&ensp;**Strengths**:Robust when returns are hard to forecast; simple; often diversified.
+&ensp;&ensp;&ensp;&ensp;**Goal**:Minimize total portfolio variance regardless of expected return.<br>
+&ensp;&ensp;&ensp;&ensp;**Strengths**:Robust when returns are hard to forecast; simple; often diversified.<br>
 &ensp;&ensp;&ensp;&ensp;**Limitations**:Ignores expected returns; can overweight low-vol assets; may underperform in bull markets.
 
 #### 3. Risk Parity
