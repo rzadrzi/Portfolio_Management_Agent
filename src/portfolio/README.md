@@ -59,12 +59,12 @@
 ## More:
 
 ### 1. Mean-Variance / Markowitz
-**Efficient Frontier**
-$$Return= E[R_p​]=w_1​μ_1​+w_2​μ_2​+⋯+w_n​μ_n​=w^⊤μ$$
+**Efficient Frontier**<br>
+$$Return= E[R_p​]=w_1​μ_1​+w_2​μ_2​+⋯+w_n​μ_n​=w^⊤μ$$<br>
 $$Risk= σ_p^2​=w^⊤Σcov$$
 
-**GMV / MVP**
-$$min_w \sum_i w_i $$s.t.$$ w^⊤Σcov=1$$
+**GMV / MVP**<br>
+$$min_w \sum_i w_i $$<br>s.t.$$ w^⊤Σcov=1$$
 
-**Tangency Portfolio / Maximum Sharpe**
+**Tangency Portfolio / Maximum Sharpe**<br>
 $$Sharpe Ratio=\frac{E[R_p​]−r_f}{σ_p}$$
