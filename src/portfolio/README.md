@@ -32,9 +32,9 @@
 &ensp;&ensp;&ensp;&ensp;**Limitations**: Heuristic; results depend on resampling design; may dilute optimality.
 
 #### 7. Hierarchical Risk Parity, HRP
-&ensp;&ensp;&ensp;&ensp;**Goal**: Allocate via correlation clustering to diversify across clusters.<br>
-&ensp;&ensp;&ensp;&ensp;**Strengths**: Handles noisy covariance; stable and diversified; avoids matrix inversion pitfalls.<br>
-&ensp;&ensp;&ensp;&ensp;**Limitations**: Depends on clustering choices; less control over explicit return targets.
+&ensp;&ensp;&ensp;&ensp; **Goal**: Allocate via correlation clustering to diversify across clusters.<br>
+&ensp;&ensp;&ensp;&ensp; **Strengths**: Handles noisy covariance; stable and diversified; avoids matrix inversion pitfalls.<br>
+&ensp;&ensp;&ensp;&ensp; **Limitations**: Depends on clustering choices; less control over explicit return targets.
 
 -------
 
@@ -53,17 +53,18 @@
 &ensp;&ensp;&ensp;&ensp;**Goal**: Solve discrete/large QUBO-style portfolio problems efficiently.<br>
 &ensp;&ensp;&ensp;&ensp;**Strengths**: Promising for combinatorial constraints; frontier research momentum.<br>
 &ensp;&ensp;&ensp;&ensp;**Limitations**: Early-stage; hardware/solver limits; translation to business constraints nontrivial.
+
+
 -----
 ## More:
 
 ### 1. Mean-Variance / Markowitz
 **Efficient Frontier**
-Return: E[Rp​]=w1​μ1​+w2​μ2​+⋯+wn​μn​=w⊤μ
-Risk: σp2​=w⊤Σw
+$$Return= E[R_p​]=w_1​μ_1​+w_2​μ_2​+⋯+w_n​μ_n​=w^⊤μ$$
+$$Risk= σ_p^2​=w^⊤Σcov$$
 
 **GMV / MVP**
-wmin​w⊤Σws.t. i∑​wi​=1
+$$min_w \sum_i w_i $$s.t.$$ w^⊤Σcov=1$$
 
 **Tangency Portfolio / Maximum Sharpe**
-Sharpe Ratio=σp​E[Rp​]−rf​​
-
+$$Sharpe Ratio=\frac{E[R_p​]−r_f}{σ_p}$$
