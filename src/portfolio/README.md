@@ -68,3 +68,6 @@ $$min_w \sum_i w_i $$<br>s.t.$$ w^⊤Σcov=1$$
 
 **Tangency Portfolio / Maximum Sharpe**<br>
 $$Sharpe Ratio=\frac{E[R_p​]−r_f}{σ_p}$$
+
+![Efficient_Frontier_Markowitz](../../images/Efficient_Frontier_Markowitz.png)
+
