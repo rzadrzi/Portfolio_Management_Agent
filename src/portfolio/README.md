@@ -53,3 +53,17 @@
 &ensp;&ensp;&ensp;&ensp;**Goal**: Solve discrete/large QUBO-style portfolio problems efficiently.<br>
 &ensp;&ensp;&ensp;&ensp;**Strengths**: Promising for combinatorial constraints; frontier research momentum.<br>
 &ensp;&ensp;&ensp;&ensp;**Limitations**: Early-stage; hardware/solver limits; translation to business constraints nontrivial.
+-----
+## More:
+
+### 1. Mean-Variance / Markowitz
+**Efficient Frontier**
+Return: E[Rp​]=w1​μ1​+w2​μ2​+⋯+wn​μn​=w⊤μ
+Risk: σp2​=w⊤Σw
+
+**GMV / MVP**
+wmin​w⊤Σws.t. i∑​wi​=1
+
+**Tangency Portfolio / Maximum Sharpe**
+Sharpe Ratio=σp​E[Rp​]−rf​​
+
