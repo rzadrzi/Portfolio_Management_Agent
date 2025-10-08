@@ -64,10 +64,26 @@ $$Return= E[R_p​]=w_1​μ_1​+w_2​μ_2​+⋯+w_n​μ_n​=w^⊤μ$$<br>
 $$Risk= σ_p^2​=w^⊤Σcov$$
 
 **GMV / MVP**<br>
-$$min_w \sum_i w_i $$<br>s.t.$$ w^⊤Σcov=1$$
+$$min_w \sum_i w_i $$<br>s.t.<br>$$ w^⊤Σcov=1$$
 
 **Tangency Portfolio / Maximum Sharpe**<br>
 $$Sharpe Ratio=\frac{E[R_p​]−r_f}{σ_p}$$
 
+
+## No-Short Optimization
+
+$$
+\begin{aligned}
+\min_{\mathbf{w} \in \mathbb{R}^n} \quad & \mathbf{w}^\top \Sigma \mathbf{w} \\
+\text{subject to} \quad 
+& \mathbf{1}^\top \mathbf{w} = 1, \\
+& \mathbf{w}^\top \mu = \mu^*, \\
+& 0 \le w_i \le 1, \quad i = 1, \dots, n.
+\end{aligned}
+$$
+
+
+
 ![Efficient_Frontier_Markowitz](../../images/Efficient_Frontier_Markowitz.png)
+
 
