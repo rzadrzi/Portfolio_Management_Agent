@@ -82,3 +82,69 @@ def efficient_frontier(mu, Sigma, n_points=50, short_sale=True):
             # infeasible target under no-short; skip
             continue
     return np.array(ws), np.array(ers), np.array(vols)
+
+
+# ---------- Demo / Example ----------
+if __name__ == "__main__":
+    np.random.seed(7)
+    n_assets = 6
+    T = 600  # observations
+
+    # --- Replace this block with your CSV prices ---
+    # Example synthetic returns with a random covariance
+    A = np.random.randn(n_assets, n_assets)
+    Sigma_true = A @ A.T / n_assets
+    mu_true = np.array([0.10, 0.12, 0.08, 0.15, 0.05, 0.11]) / 252  # daily mean
+    R = np.random.multivariate_normal(mean=mu_true, cov=Sigma_true/252, size=T)
+    returns = pd.DataFrame(R, columns=[f"A{i+1}" for i in range(n_assets)])
+    # --- If you have prices, do this instead:
+    # prices = pd.read_csv("prices.csv", index_col=0, parse_dates=True)
+    # returns = to_returns(prices, log=True)
+
+    mu, Sigma = mean_cov(returns)
+    mu_a, Sigma_a = annualize(mu, Sigma, periods_per_year=252)
+
+    rf = 0.02  # 2% annual risk-free
+
+    # Closed-form (allow short-selling)
+    w_gmv = gmv_weights_closed(Sigma_a)
+    w_tan = tangency_weights_closed(mu_a, Sigma_a, rf=rf)
+
+    # Numerical (no short-selling)
+    w_gmv_ns = global_min_variance(Sigma_a, short_sale=False)
+    w_tan_ns = tangency_portfolio(mu_a, Sigma_a, rf=rf, short_sale=False)
+
+    # Efficient frontier
+    W, ERs, VOLs = efficient_frontier(mu_a, Sigma_a, n_points=60, short_sale=False)
+
+    # Print key portfolios
+    print("GMV (closed-form, short allowed):", np.round(w_gmv, 4))
+    print("Tangency (closed-form, short allowed):", np.round(w_tan, 4))
+    er_gmv, vol_gmv, sr_gmv = portfolio_stats(w_gmv, mu_a, Sigma_a, rf)
+    er_tan, vol_tan, sr_tan = portfolio_stats(w_tan, mu_a, Sigma_a, rf)
+    print(f"GMV  -> E[R]={er_gmv:.3%}, Vol={vol_gmv:.3%}, Sharpe={sr_gmv:.3f}")
+    print(f"TAN  -> E[R]={er_tan:.3%}, Vol={vol_tan:.3%}, Sharpe={sr_tan:.3f}")
+
+    # Plot Efficient Frontier
+    plt.figure(figsize=(7,5))
+    plt.scatter(VOLs, ERs, s=12, label="Efficient Frontier (No-Short)")
+    # mark GMV & Tangency (no-short)
+    er_gmv_ns, vol_gmv_ns, _ = portfolio_stats(w_gmv_ns, mu_a, Sigma_a, rf)
+    er_tan_ns, vol_tan_ns, _ = portfolio_stats(w_tan_ns, mu_a, Sigma_a, rf)
+    plt.scatter([vol_gmv_ns],[er_gmv_ns], marker='o', s=60, label="GMV (No-Short)")
+    plt.scatter([vol_tan_ns],[er_tan_ns], marker='^', s=60, label="Tangency (No-Short)")
+
+    plt.xlabel("Volatility (annualized)")
+    plt.ylabel("Expected Return (annualized)")
+    plt.legend()
+    plt.title("Markowitz Mean-Variance: Efficient Frontier")
+    plt.tight_layout()
+    plt.show()
+
+    # Show weights table for tangency (no-short)
+    weights_df = pd.DataFrame({
+        "Asset": returns.columns,
+        "w_Tangency_NoShort": np.round(w_tan_ns, 4),
+        "w_GMV_NoShort": np.round(w_gmv_ns, 4)
+    })
+    print(weights_df)
