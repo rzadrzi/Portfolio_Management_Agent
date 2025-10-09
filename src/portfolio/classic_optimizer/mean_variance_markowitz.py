@@ -3,11 +3,13 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
-from .utilities import to_returns, mean_cov, annualize, portfolio_stats, project_to_simplex
+# from .utilities import to_returns, mean_cov, annualize, portfolio_stats, project_to_simplex
 
+from utils import to_returns, mean_cov, annualize, portfolio_stats, project_to_simplex
 
 class MeanVarianceMarkowitz:
     def __init__(self, mu, Sigma, rf=0.1, short_sale=True):
+        print("Mean-Variance Markowitz Optimizer Initialized")
         self.mu = mu
         self.Sigma = Sigma
         self.rf = rf
@@ -143,6 +145,6 @@ if __name__ == "__main__":
     plt.legend()
     plt.title("Markowitz Mean-Variance: Efficient Frontier")
     plt.tight_layout()
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.style.use('seaborn-v0_8')
     plt.show()
-# mean_variance_markowitz.py
-# import numpy as np    
