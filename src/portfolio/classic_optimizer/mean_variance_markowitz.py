@@ -1,11 +1,10 @@
-# utilities.py
+# mean_variance_markwitz.py
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
-# from .utilities import to_returns, mean_cov, annualize, portfolio_stats, project_to_simplex
 
-from utils import to_returns, mean_cov, annualize, portfolio_stats, project_to_simplex
+from portfolio.utils import to_returns, mean_cov, annualize, portfolio_stats, project_to_simplex
 
 class MeanVarianceMarkowitz:
     def __init__(self, mu, Sigma, rf=0.1, short_sale=True):

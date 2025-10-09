@@ -1,0 +1,43 @@
+── images
+│   └── Efficient_Frontier_Markowitz.png
+├── main.py
+├── notebooks
+│   └── returns_prediction.ipynb
+├── pyproject.toml
+├── README.md
+├── src
+│   ├── data_preprocessor.py
+│   ├── __init__.py
+│   ├── portfolio
+│   │   ├── algorithmic_optimizer
+│   │   │   └── __init__.py
+│   │   ├── classic_optimizer
+│   │   │   ├── __init__.py
+│   │   │   ├── mean_variance_markowitz.py
+│   │   │   └── __pycache__
+│   │   │       ├── __init__.cpython-313.pyc
+│   │   │       ├── mean_variance_markowitz.cpython-313.pyc
+│   │   │       └── utilities.cpython-313.pyc
+│   │   ├── __init__.py
+│   │   ├── optimizers.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-313.pyc
+│   │   │   ├── mean_variance_markowitz.cpython-313.pyc
+│   │   │   └── utilities.cpython-313.pyc
+│   │   ├── README.md
+│   │   ├── risk
+│   │   │   ├── __init__..py
+│   │   │   ├── risk.py
+│   │   │   └── rules.json
+│   │   └── utils
+│   │       ├── __init__.py
+│   │       ├── __pycache__
+│   │       │   ├── __init__.cpython-313.pyc
+│   │       │   └── utilities.cpython-313.pyc
+│   │       └── utilities.py
+│   └── __pycache__
+│       └── __init__.cpython-313.pyc
+├── structure.txt
+├── tests
+│   └── vectorbt_test.py
+└── uv.lock

@@ -1,1 +1,1 @@
-from .mean_variance_markowitz import MeanVarianceMarkowitz
+from .mean_variance_markowitz import *
